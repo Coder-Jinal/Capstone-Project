@@ -248,3 +248,33 @@ exports.removeTrip = (req, res) => {
 };
 
 
+// Add this to your trip_overview.js
+exports.viewSharedTrip = (req, res) => {
+  try {
+    const { tripType, tripId } = req.params;
+    
+    // Find the trip in savedTrips
+    const trip = savedTrips.find(t => 
+      (t.type === tripType && (t.hotelId === tripId || t.flightId === tripId))
+    );
+    
+    if (!trip) {
+      return res.status(404).render('error', {
+        message: 'Trip not found or may have been removed',
+        error: { status: 404 }
+      });
+    }
+    
+    res.render('trip_overview/shared_trip', {
+      title: `Shared ${tripType}`,
+      trip: trip,
+      isSharedView: true
+    });
+  } catch (error) {
+    console.error('Error in viewSharedTrip:', error);
+    res.status(500).render('error', {
+      message: 'Error loading shared trip',
+      error: error
+    });
+  }
+};

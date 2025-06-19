@@ -15,3 +15,19 @@ header
           a(href="/images") Destinations
         li
           a(href="/trip-overview") Trip Overview
+
+        if session && session.user
+          li
+            a(href="/user/profile") Profile
+          li
+            a(href="/user/logout") Logout
+        else
+          li
+            a(href="/user/login") Login
+          li
+            a(href="/user/register") Register
+
+
+
+
+
