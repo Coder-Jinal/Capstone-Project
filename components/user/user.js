@@ -42,6 +42,12 @@ const userSchema = new mongoose.Schema({
         'What was the name of your first school?',
         'What was your childhood nickname?'
       ]
+    },
+    answer: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 2
     }
   }
 });
