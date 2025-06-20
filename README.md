@@ -27,15 +27,19 @@
   - **Pixabay API** – Destination imagery and descriptions
 
 ## Challenges & Solutions
-1. Creating a seamless user experience across multiple APIs was one of the biggest challenges. This was addressed by:
-- Implementing robust error handling for API failures and timeouts.
-- Using async/await for clean and manageable API calls.
-- Introducing UI feedback (loading indicators and modals) during data fetching operations.
-2. Implementing Password reset functionality was quite tough. This was addresses by:
-- Introduced a security question and answer mechanism during user registration.
-- When a user forgets their password, they must correctly answer their saved security question.
-- This information is securely stored in the database and verified before allowing password updates.
-- This method avoids external email services while still offering a layer of user identity verification.
+1. **Multi-API Integration**
+   Creating a seamless user experience across multiple APIs was one of the biggest challenges.
+   **Solution**:
+  - Implementing robust error handling for API failures and timeouts.
+  - Using async/await for clean and manageable API calls.
+  - Introducing UI feedback (loading indicators and modals) during data fetching operations.
+2. **Password Reset Without Email**  
+   Implementing password reset functionality without email support was complex.  
+   **Solution**:
+  - Introduced a security question and answer mechanism during user registration.
+  - When a user forgets their password, they must correctly answer their saved security question.
+  - This information is securely stored in the database and verified before allowing password updates.
+  - This method avoids external email services while still offering a layer of user identity verification.
 
 ## Future Enhancements
 - **Map Integration**: Interactive maps to visualize saved trips geographically.
@@ -80,7 +84,11 @@
 6. **Open in browser**
    ```bash
    http://localhost:3000
-   
+
+## 🔗Live Demo & Presentation
+- 🌐**Live Deployed App**: https://travelcompanion-3.onrender.com/
+- 🎥**Capstone Presentation Video**: https://youtu.be/z7fpU-9J4ik
+
 ---
 **Work Done By**:
 Jinal Patel
