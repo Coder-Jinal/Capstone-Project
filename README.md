@@ -77,7 +77,7 @@ Creating a seamless user experience across multiple APIs was one of the biggest 
    ```bash
    npm start or npm run dev
 6. **Open in browser**
-   ```http://localhost:3000
+   ```Go to http://localhost:3000
    
 ---
 **Work Done By**:
