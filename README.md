@@ -5,16 +5,15 @@
 
 ## Features
 - **User Authentication**: Secure account registration, login, logout, and profile editing.
+- **Password Reset**: Password reset with security question and answer.
 - **Flight Search**: Search flights by origin, destination, and date, and view real-time status updates.
 - **Weather Forecast**: Display 5-day weather forecast for selected travel destinations.
 - **Accommodation Finder**: Search hotels by city, check-in/out dates, and number of guests. View amenities and pricing.
 - **Trip Planner**: Save and manage flights and hotel data into custom trip plans.
 - **Destination Visuals**: Display images and descriptions of cities using Pixabay API.
 - **Trip Management**: Edit and delete saved trips from a personal planner.
-- **Theme Toggle**: Switch between light mode and dark mode for a personalized UI experience.
 - **Trip Sharing**: Share planned trips via email or a shareable link.
-- **Recent Searches**: View a list of recently searched destinations.
-- **Accommodation Filters**: Filter hotel results by price range, ratings, or type.
+- - **Quick Link Access**: Quick Link Access for solving common issues. 
 
 ## Technologies Used
 - **Backend**: Node.js, Express.js
@@ -28,18 +27,20 @@
   - **Pixabay API** – Destination imagery and descriptions
 
 ## Challenges & Solutions
-Creating a seamless user experience across multiple APIs was one of the biggest challenges. This was addressed by:
+1. Creating a seamless user experience across multiple APIs was one of the biggest challenges. This was addressed by:
 - Implementing robust error handling for API failures and timeouts.
 - Using async/await for clean and manageable API calls.
 - Introducing UI feedback (loading indicators and modals) during data fetching operations.
-- Ensuring secure data access through session-based Passport.js authentication.
+2. Implementing Password reset functionality was quite tough. This was addresses by:
+- Introduced a security question and answer mechanism during user registration.
+- When a user forgets their password, they must correctly answer their saved security question.
+- This information is securely stored in the database and verified before allowing password updates.
+- This method avoids external email services while still offering a layer of user identity verification.
 
 ## Future Enhancements
 - **Map Integration**: Interactive maps to visualize saved trips geographically.
 - **Calendar Sync**: Sync trip plans with Google Calendar or Outlook.
 - **User Reviews**: Enable real user ratings and feedback on hotels and destinations.
-- **Offline Support**: Implement PWA features to enable offline access to saved trips.
-- **Mobile Optimization**: Further enhance mobile responsiveness and touch gestures.
 
 ## Installation & Setup
 1. **Clone the repository**
@@ -77,7 +78,8 @@ Creating a seamless user experience across multiple APIs was one of the biggest 
    ```bash
    npm start or npm run dev
 6. **Open in browser**
-   ```Go to http://localhost:3000
+   ```bash
+   http://localhost:3000
    
 ---
 **Work Done By**:
