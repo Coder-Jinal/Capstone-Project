@@ -9,8 +9,34 @@ function isAuthenticated(req, res, next) {
 }
 
 // Profile page
+// router.get('/profile', isAuthenticated, async (req, res) => {
+//   res.render('user/profile', { user: req.session.user });
+// });
+
 router.get('/profile', isAuthenticated, async (req, res) => {
-  res.render('user/profile', { user: req.session.user });
+  try {
+    // If session doesn't have security question, fetch fresh user data
+    let user = req.session.user;
+    if (!user.securityQuestion) {
+      const freshUser = await userService.getUserById(user._id);
+      user = {
+        _id: freshUser._id,
+        username: freshUser.username,
+        email: freshUser.email,
+        securityQuestion: freshUser.securityQuestion
+      };
+      // Update session with complete data
+      req.session.user = user;
+    }
+    
+    res.render('user/profile', { user: user });
+  } catch (err) {
+    console.error('Profile error:', err);
+    res.render('user/profile', { 
+      user: req.session.user,
+      error: 'Error loading profile data'
+    });
+  }
 });
 
 // Update profile
@@ -179,13 +205,53 @@ router.get('/login', (req, res) => {
   });
 });
 
+// router.post('/login', async (req, res) => {
+//   try {
+//     const user = await userService.login(req.body.email, req.body.password);
+//     req.session.user = user;
+//     res.redirect('/trip-overview');
+//   } catch (err) {
+//     res.status(400).send('Login failed: ' + err.message);
+//   }
+// });
+
+// Login POST route with this corrected version
 router.post('/login', async (req, res) => {
   try {
+    console.log('LOGIN ATTEMPT');
+    console.log('Email:', req.body.email);
+    console.log('Session before login:', req.session);
+    
     const user = await userService.login(req.body.email, req.body.password);
-    req.session.user = user;
-    res.redirect('/trip-overview');
-  } catch (err) {
-    res.status(400).send('Login failed: ' + err.message);
+    console.log('User authenticated:', user.username);
+    
+    // Include ALL user data in session (including securityQuestion)
+    req.session.user = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      securityQuestion: user.securityQuestion // Add this line
+    };
+    
+    console.log('Session after setting user:', req.session);
+    
+    // Force session save and wait for it
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.render('user/login', { error: 'Login failed - session error' });
+      }
+      
+      console.log('Session saved successfully');
+      console.log('Final session state:', req.session);
+      
+      // Redirect to home page
+      res.redirect('/');
+    });
+    
+  } catch (error) {
+    console.error('Login error:', error.message);
+    res.render('user/login', { error: error.message });
   }
 });
 

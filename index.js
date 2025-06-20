@@ -29,25 +29,53 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Session middleware should come before res.locals
+// app.use(session({
+//   secret: process.env.SESSIONSECRET,
+//   resave: false,
+//   saveUninitialized: false,
+//   store: MongoStore.create({
+//     mongoUrl: `mongodb+srv://${process.env.DBUSER}:${process.env.DBPWD}@${process.env.DBHOST}/${process.env.DBNAME}`,
+//     touchAfter: 24 * 3600 // lazy session update
+//   }),
+//   cookie: {
+//     secure: process.env.NODE_ENV === 'production',
+//     httpOnly: true,
+//     maxAge: 24 * 60 * 60 * 1000,
+//     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+//   }
+// }));
+
 app.use(session({
   secret: process.env.SESSIONSECRET,
   resave: false,
-  saveUninitialized: true,
-  store: MongoStore.create({
-    mongoUrl: `mongodb+srv://${process.env.DBUSER}:${process.env.DBPWD}@${process.env.DBHOST}/${process.env.DBNAME}`,
-    touchAfter: 24 * 3600 // lazy session update
+  saveUninitialized: false,
+  store: MongoStore.create({ 
+    mongoUrl: `mongodb+srv://${process.env.DBUSER}:${process.env.DBPWD}@${process.env.DBHOST}/${process.env.DBNAME}`
   }),
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 24 * 60 * 60 * 1000
+    secure: true, // FORCE HTTPS (Render has this)
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: 'none', // REQUIRED for cross-site cookies
   }
 }));
 
+app.set('trust proxy', 1);
+
 // Set res.locals
+// app.use((req, res, next) => {
+//   res.locals.session = req.session;
+//   next();
+// });
+
 app.use((req, res, next) => {
-  res.locals.session = req.session;
+  // Make session user available to all templates
+  res.locals.user = req.session.user || null;
+  res.locals.isLoggedIn = !!req.session.user;
+  
   next();
 });
+
 
 // Home route
 app.get('/', (req, res) => {
